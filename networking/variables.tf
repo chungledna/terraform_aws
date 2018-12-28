@@ -12,7 +12,7 @@ variable "public_sub_cidrs" {
   ]
 }
 
-variable "public_sub_cidrs" {
+variable "private_sub_cidrs" {
   type = "list"
   default = [
     "10.90.3.0/24",

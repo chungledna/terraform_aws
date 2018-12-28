@@ -16,6 +16,7 @@ resource "aws_internet_gateway" "igw_name" {
   }
 }
 
+# Public
 resource "aws_route_table" "public_rt_name" {
   vpc_id = "${aws_vpc.vpc_name.id}"
 
@@ -29,15 +30,6 @@ resource "aws_route_table" "public_rt_name" {
   }
 }
 
-resource "aws_route_table" "private_rt_name" {
-  vpc_id = "${aws_vpc.vpc_name.id}"
-
-  tags = {
-    Name = "Private route table"
-  }
-}
-
-# Public
 resource "aws_subnet" "public_subnet" {
   count = 2
   vpc_id = "${aws_vpc.vpc_name.id}"
@@ -73,6 +65,16 @@ resource "aws_security_group" "public_security_group" {
 }
 
 # Private
+resource "aws_route_table" "private_rt_name" {
+  vpc_id = "${aws_vpc.vpc_name.id}"
+
+  tags = {
+    Name = "Private route table"
+  }
+}
+
+
+
 resource "aws_subnet" "private_subnet" {
   count = 2
   vpc_id = "${aws_vpc.vpc_name.id}"
@@ -89,7 +91,7 @@ resource "aws_route_table_association" "private_associa" {
   count = "${aws_subnet.private_subnet.count}"
 
   subnet_id = "${aws_subnet.private_subnet.*.id[count.index]}"
-  route_table_id = "${aws_route_table.pivate_rt_name.id}"
+  route_table_id = "${aws_route_table.private_rt_name.id}"
 
 }
 
@@ -103,6 +105,6 @@ resource "aws_security_group" "private_security_group" {
     from_port = 22
     to_port = 22
     protocol = "tcp"
-    security_groups = ["${aws_security_group.publick_security_group.id}"]
+    security_groups = ["${aws_security_group.public_security_group.id}"]
   }
 }
