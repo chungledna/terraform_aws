@@ -41,6 +41,7 @@ resource "aws_subnet" "public_subnet" {
   count = 2
   vpc_id = "${aws_vpc.vpc_name.id}"
   map_public_ip_on_launch = true
+  cidr_block = "${var.public_sub_cidrs[count.index]}"
   availability_zone = "${data.aws_availability_zones.available.names[count.index]}"
 
   tags = {

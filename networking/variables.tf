@@ -4,4 +4,12 @@ variable "vpc_cidr_block" {
   default = "10.90.0.0/16"
 }
 
+variable "public_sub_cidrs" {
+  type = "list"
+  default = [
+    "10.90.1.0/24",
+    "10.90.2.0/24"
+  ]
+}
+
 variable "ssh_access_ip" {}
