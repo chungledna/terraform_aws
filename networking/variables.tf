@@ -12,4 +12,12 @@ variable "public_sub_cidrs" {
   ]
 }
 
+variable "public_sub_cidrs" {
+  type = "list"
+  default = [
+    "10.90.3.0/24",
+    "10.90.4.0/24"
+  ]
+}
+
 variable "ssh_access_ip" {}

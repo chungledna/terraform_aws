@@ -7,4 +7,5 @@ variable "region" {
 
 variable "ssh_access_ip" {
   description = "List of cidr_block that allow to remote to AWS resource"
+  default = "192.168.1.1/32"
 }
