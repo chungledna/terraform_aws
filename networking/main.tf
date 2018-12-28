@@ -62,6 +62,10 @@ resource "aws_security_group" "public_security_group" {
     protocol = "tcp"
     cidr_blocks = ["${var.ssh_access_ip}"]
   }
+
+  tags = {
+    Name = "Public_SG"
+  }
 }
 
 # Private
@@ -106,5 +110,9 @@ resource "aws_security_group" "private_security_group" {
     to_port = 22
     protocol = "tcp"
     security_groups = ["${aws_security_group.public_security_group.id}"]
+  }
+
+  tags = {
+    Name = "Private_SG"
   }
 }
