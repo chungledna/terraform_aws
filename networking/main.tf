@@ -50,9 +50,9 @@ resource "aws_route_table_association" "public_associa" {
 
 }
 
-resource "aws_security_group" "public_security_group" {
-  name = "public_security_group"
-  description = "Public security group"
+resource "aws_security_group" "bastion_sg" {
+  name = "bastion_sg"
+  description = "This security group will just allow ssh from office IP address"
   vpc_id = "${aws_vpc.vpc_name.id}"
 
   #SSH
@@ -64,7 +64,7 @@ resource "aws_security_group" "public_security_group" {
   }
 
   tags = {
-    Name = "Public_SG"
+    Name = "Bastion SG"
   }
 }
 
@@ -99,6 +99,23 @@ resource "aws_route_table_association" "private_associa" {
 
 }
 
+resource "aws_security_group" "elb_web_sg" {
+  name = "elb_web_sg"
+  description = "Just allow request to port 80 from internet"
+  vpc_id = "${aws_vpc.vpc_name.id}"
+
+  ingress {
+    from_port = 80
+    to_port = 80
+    protocol = "tcp"
+    cidr_block = "0.0.0.0/0"
+  }
+
+  tags = {
+    Name = "Web ELB"
+  }
+}
+
 resource "aws_security_group" "private_security_group" {
   name = "private_security_group"
   description = "Private security group"
@@ -109,7 +126,15 @@ resource "aws_security_group" "private_security_group" {
     from_port = 22
     to_port = 22
     protocol = "tcp"
-    security_groups = ["${aws_security_group.public_security_group.id}"]
+    security_groups = ["${aws_security_group.bastion_sg.id}"]
+  }
+
+  #Web
+  ingress {
+    from_port = 80
+    to_port = 80
+    protocol = "tcp"
+    security_groups = ["${aws_security_group.elb_web_sg.id}"]
   }
 
   tags = {

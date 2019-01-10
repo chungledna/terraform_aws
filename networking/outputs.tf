@@ -5,7 +5,7 @@ output "public_subnets" {
 }
 
 output "public_sg" {
-  value = "${aws_security_group.public_security_group.id}"
+  value = "${aws_security_group.bastion_sg.id}"
 }
 
 output "subnet_ips" {
